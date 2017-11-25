@@ -26,13 +26,11 @@ public class RandomSentenceGenerator
 				String filename = "brown/c" + ((char)(i + 97)) + (j < 10 ? "0" + j : j);
 				if(new File(filename).exists())
 				{
-					//System.out.println("Loading file " + filename);
-
 					try
 					{
 						BufferedInputStream in = new BufferedInputStream(new FileInputStream(filename));
 						String content = new String(in.readAllBytes());
-						String[] tokens = content.split(" ");
+						String[] tokens = content.split("[\n ]");
 						for(String token : tokens)
 						{
 							token = token.replaceAll("[\t\n ]*", "");
@@ -57,8 +55,6 @@ public class RandomSentenceGenerator
 							if(!typeTokenMap.containsKey(tokenType))
 								typeTokenMap.put(tokenType, new ArrayList<>());
 							typeTokenMap.get(tokenType).add(tokenText);
-
-							//System.out.println(tokenText + "/" + tokenType);
 						}
 					}
 					catch(Exception e)
