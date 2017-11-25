@@ -83,7 +83,8 @@ public class RandomSentenceGenerator
 				if(!typeTokenMap.containsKey(tokenType) || typeTokenMap.get(tokenType).size() == 0)
 					throw new RuntimeException("No tokens with type " + tokenType);
 				String replacement = typeTokenMap.get(tokenType).get((int)Math.floor(random.nextDouble() * (typeTokenMap.get(tokenType).size())));
-				result = result.replaceFirst("<" + tokenType + ">", replacement);
+				result = result.replace("<" + tokenType + ">", replacement);
+
 			}
 			else
 				noTokens = true;
