@@ -1,0 +1,6 @@
+.DS_Store
+Thumbs.db
+._*
+.idea/workspace.xml
+.idea/tasks.xml
+out
