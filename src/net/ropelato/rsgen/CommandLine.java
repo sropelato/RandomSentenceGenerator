@@ -32,8 +32,8 @@ public class CommandLine
 			}
 		}
 
+		// create random sentence generator and print generated sentences
 		RandomSentenceGenerator rsgen = new RandomSentenceGenerator();
-
 		for(int i = 0; i < iterations; i++)
 		{
 			System.out.println(rsgen.getRandomSentence(pattern));

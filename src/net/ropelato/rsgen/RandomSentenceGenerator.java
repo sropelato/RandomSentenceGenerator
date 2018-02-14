@@ -8,6 +8,7 @@ import java.util.regex.Pattern;
 public class RandomSentenceGenerator
 {
 	public static final String TOKEN_TYPE_SEPARATOR = "/";
+	public static final String DOLLAR_REPLACEMENT = "__DOLLAR_SIGN__";
 
 	private final Map<String, List<String>> typeTokenMap = new HashMap<>();
 	private final Random random;
@@ -17,10 +18,8 @@ public class RandomSentenceGenerator
 		random = new Random(System.currentTimeMillis());
 
 		// read corpus files
-		//for(int i = 0; i < 1; i++)
 		for(int i = 0; i < 26; i++)
 		{
-			//for(int j = 1; j < 2; j++)
 			for(int j = 0; j < 100; j++)
 			{
 				String filename = "brown/c" + ((char)(i + 97)) + (j < 10 ? "0" + j : j);
@@ -53,7 +52,7 @@ public class RandomSentenceGenerator
 							}
 
 							if(!typeTokenMap.containsKey(tokenType))
-								typeTokenMap.put(tokenType, new ArrayList<>());
+								typeTokenMap.put(tokenType.toLowerCase(), new ArrayList<>());
 							typeTokenMap.get(tokenType).add(tokenText);
 						}
 					}
@@ -69,8 +68,6 @@ public class RandomSentenceGenerator
 	public String getRandomSentence(String pattern)
 	{
 		String result = pattern;
-
-		// replace counted tokens
 		Pattern regexPattern = Pattern.compile("<([A-Za-z]+[-]?[a-z.,`'\\$]*)>");
 
 		boolean noTokens = false;
@@ -80,16 +77,20 @@ public class RandomSentenceGenerator
 			if(matcher.find())
 			{
 				String tokenType = matcher.group(1);
-				if(!typeTokenMap.containsKey(tokenType) || typeTokenMap.get(tokenType).size() == 0)
+				if(!typeTokenMap.containsKey(tokenType.toLowerCase()) || typeTokenMap.get(tokenType.toLowerCase()).size() == 0)
 					throw new RuntimeException("No tokens with type " + tokenType);
-				String replacement = typeTokenMap.get(tokenType).get((int)Math.floor(random.nextDouble() * (typeTokenMap.get(tokenType).size())));
-				result = result.replace("<" + tokenType + ">", replacement);
 
+				String replacement = typeTokenMap.get(tokenType.toLowerCase()).get((int)Math.floor(random.nextDouble() * (typeTokenMap.get(tokenType.toLowerCase()).size())));
+
+				// the $ character cannot be used for replacements as it will mess up the regex processing in the
+				// following iterations. We therefore repalce it by DOLLAR_REPLACEMENT
+				result = result.replaceFirst("(<" + tokenType + ">)", replacement.replaceAll("\\$", DOLLAR_REPLACEMENT));
 			}
 			else
 				noTokens = true;
 		}
 
-		return result;
+		// replace DOLLAR_REPLACEMENT by the actual $ character
+		return result.replaceAll(DOLLAR_REPLACEMENT, "\\$");
 	}
 }
