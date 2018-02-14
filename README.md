@@ -106,6 +106,7 @@ The above command may return something like this:
 | WPS | nominative wh- pronoun (who, which, that) |
 | WQL | wh- qualifier (how) |
 | WRB | wh- adverb (how, where, when) |
+
 *Source: [https://en.wikipedia.org/wiki/Brown_Corpus](https://en.wikipedia.org/wiki/Brown_Corpus)*
 
 
